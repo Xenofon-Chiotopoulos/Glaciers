@@ -59,7 +59,27 @@ class Glacier:
 class GlacierCollection:
 
     def __init__(self, file_path):
-        raise NotImplementedError
+        glacier_init = []
+        self.glacier_init = glacier_init
+        self.year = []
+        mass_balance = []
+        self.mass_balance = mass_balance
+        self.sorted_glaciers = []
+        self.latest_year_measurment = []
+        self.id_list = []
+
+        with open(file_path_A, newline='', encoding = 'utf8') as csvfile:
+            glaciers = csv.DictReader(csvfile, delimiter=',')
+            for row in glaciers:
+                unit = str(row['POLITICAL_UNIT']) 
+                name = str(row['NAME'])
+                code = int(str(row['PRIM_CLASSIFIC']) + str(row['FORM']) + str(row['FRONTAL_CHARS']))
+                latitude = float(row['LATITUDE'])
+                longitude = float(row['LONGITUDE'])
+                id = str(row['WGMS_ID'])
+        
+                self.glacier_init.append(Glacier(id,name,unit,latitude,longitude,code))
+                self.id_list.append(id)
 
     def read_mass_balance_data(self, file_path):
         raise NotImplementedError
