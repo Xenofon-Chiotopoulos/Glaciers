@@ -50,7 +50,13 @@ class Glacier:
         self.year_balance_dict = {}
 
     def add_mass_balance_measurement(self, year, mass_balance):
-        raise NotImplementedError
+        if mass_balance[1] == True and self.current_year_balance != 0: #partical measurments fin
+            self.year_balance_dict.update({year:self.current_year_balance})
+            self.current_year_balance = 0
+        elif mass_balance[1] == False: # partial measurments 
+            self.current_year_balance += mass_balance[0]
+        else:
+            self.year_balance_dict.update({year:mass_balance[0]})
 
     def plot_mass_balance(self, output_path):
         raise NotImplementedError
@@ -82,7 +88,32 @@ class GlacierCollection:
                 self.id_list.append(id)
 
     def read_mass_balance_data(self, file_path):
-        raise NotImplementedError
+        with open(file_path_EE, newline='', encoding='utf8') as csvfile:
+            glaciers = csv.DictReader(csvfile, delimiter = ',')
+            current_glacier = 0
+            for row in glaciers:
+                if row['ANNUAL_BALANCE'] == '':
+                    continue
+                yer = int(row['YEAR'])
+                if yer > datetime.now().year:
+                    raise Exception('Year read from csv is in the future')
+                self.year.append(yer)
+                id_EE = str(row['WGMS_ID'])
+                if id_EE not in self.id_list:
+                    raise Exception('Unrecognised glacier encountered. All id from datasheet must correspond to a previously defined object')
+                for j in range(len(self.glacier_init)):
+                    if self.glacier_init[j].glacier_id == id_EE:
+                        current_glacier = j
+                upper_bound = int(row['UPPER_BOUND']) 
+                annual_balance = row['ANNUAL_BALANCE']
+                if type(annual_balance) != int and type(annual_balance) != float:
+                    raise TypeError('Value entered must be a integer or float')
+                annual_balance = int(annual_balance)
+                if upper_bound == 9999:
+                    self.glacier_init[current_glacier].add_mass_balance_measurement(yer, [annual_balance, True])
+                else:
+                    self.glacier_init[current_glacier].add_mass_balance_measurement(yer, [annual_balance, False])
+
 
     def find_nearest(self, lat, lon, n):
         """Get the n glaciers closest to the given coordinates."""
