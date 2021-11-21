@@ -1,6 +1,6 @@
 class Glacier:
     def __init__(self, glacier_id, name, unit, lat, lon, code):
-        #test
+        #testing
         raise NotImplementedError
 
     def add_mass_balance_measurement(self, year, mass_balance):
