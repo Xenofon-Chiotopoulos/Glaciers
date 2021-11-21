@@ -121,7 +121,57 @@ class GlacierCollection:
     
     def filter_by_code(self, code_pattern):
         """Return the names of glaciers whose codes match the given pattern."""
-        raise NotImplementedError
+        result_list = []
+        code_list = [str(i) for i in str(code_pattern)]
+        number_of_unknown = code_list.count('?')
+        if type(code_pattern) != int:
+            raise TypeError('incorrect type. Enter integer')
+        if len(str(code_pattern)) != 3:
+            raise Exception('Input of wrong length. Enter 3 digit code')
+        if number_of_unknown == 0:
+            code_pattern = int(code_pattern)
+            for i in range(len(self.glacier_init)):
+                if code_pattern == self.glacier_init[i].code:
+                    result_list.append(self.glacier_init[i].name)
+        elif number_of_unknown == 1:
+            for i in range(2):
+                if code_list[0] == '?':
+                    for j in range(len(self.glacier_init)):
+                        code_list_comparrison = [str(k) for k in str(self.glacier_init[j].code)]
+                        if code_pattern[1] == code_list_comparrison[1] and code_pattern[2] == code_list_comparrison[2]:
+                            result_list.append(self.glacier_init[j].name)
+                if code_list[1] == '?':
+                    for j in range(len(self.glacier_init)):
+                        code_list_comparrison = [str(k) for k in str(self.glacier_init[j].code)]
+                        if code_pattern[0] == code_list_comparrison[0] and code_pattern[2] == code_list_comparrison[2]:
+                            result_list.append(self.glacier_init[j].name)
+                if code_list[2] == '?':
+                    for j in range(len(self.glacier_init)):
+                        code_list_comparrison = [str(k) for k in str(self.glacier_init[j].code)]
+                        if code_pattern[1] == code_list_comparrison[1] and code_pattern[0] == code_list_comparrison[0]:
+                            result_list.append(self.glacier_init[j].name)
+        elif number_of_unknown == 2:
+            for i in range(2):
+                if code_list[0] == '?' and code_list[1] == '?':
+                    for j in range(len(self.glacier_init)):
+                        code_list_comparrison = [str(k) for k in str(self.glacier_init[j].code)]
+                        if code_pattern[2] == code_list_comparrison[2]:
+                            result_list.append(self.glacier_init[j].name)
+                if code_list[0] == '?'and code_list[2] == '?':
+                    for j in range(len(self.glacier_init)):
+                        code_list_comparrison = [str(k) for k in str(self.glacier_init[j].code)]
+                        if code_pattern[1] == code_list_comparrison[1]:
+                            result_list.append(self.glacier_init[j].name)
+                if code_list[1] == '?'and code_list[2] == '?':
+                    for j in range(len(self.glacier_init)):
+                        code_list_comparrison = [str(k) for k in str(self.glacier_init[j].code)]
+                        if code_pattern[0] == code_list_comparrison[0]:
+                            result_list.append(self.glacier_init[j].name)
+        elif number_of_unknown == 3:
+           for i in range(len(self.glacier_init)):
+                result_list.append(self.glacier_init[i].name)
+        print(result_list)
+
 
     def sort_by_latest_mass_balance(self, n, reverse):
         """Return the N glaciers with the highest area accumulated in the last measurement."""
