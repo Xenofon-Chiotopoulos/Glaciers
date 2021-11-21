@@ -1,3 +1,15 @@
+import csv
+from math import dist
+from pathlib import Path
+from typing import Collection
+from utils import haversine_distance
+from datetime import datetime
+import matplotlib.pyplot as plt
+
+location = ''
+file_path_A = Path(location + "sheet-A.csv")
+file_path_EE = Path(location + "sheet-EE.csv")
+
 class Glacier:
     def __init__(self, glacier_id, name, unit, lat, lon, code):
         #testing
