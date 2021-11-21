@@ -192,9 +192,25 @@ class GlacierCollection:
         print(result_list)
 
 
-    def sort_by_latest_mass_balance(self, n, reverse):
+    def sort_by_latest_mass_balance(self, reverse, n=5):
         """Return the N glaciers with the highest area accumulated in the last measurement."""
-        raise NotImplementedError
+        for j in range(len(self.glacier_init)):
+            if len(self.glacier_init[j].year_balance_dict.keys()) == 0:
+                continue
+            else:
+                keys = self.glacier_init[j].year_balance_dict.keys()
+                values = self.glacier_init[j].year_balance_dict.values()
+                self.latest_year_measurment.append([j,max(zip(keys, values))])
+            self.latest_year_measurment.sort(key=lambda sort:sort[1][1])
+        for i in range(len(self.latest_year_measurment)):
+            dummy = self.latest_year_measurment[i][0]
+            self.sorted_glaciers.append(self.glacier_init[dummy])
+
+        if reverse == False:
+            return self.sorted_glaciers[0:n]
+        elif reverse == True:
+            return self.sorted_glaciers[-n:]
+
 
     def summary(self):
         raise NotImplementedError
