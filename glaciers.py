@@ -117,7 +117,26 @@ class GlacierCollection:
 
     def find_nearest(self, lat, lon, n):
         """Get the n glaciers closest to the given coordinates."""
-        raise NotImplementedError
+        if type(lon) != int and type(lon) != float:
+            raise TypeError('incorrect type. Enter a integer or float')
+        if float(lon) < -180 or float(lon) > 180:
+            raise Exception('latitude input is out of bounds. Latitude must be between -180 and 180')
+        if type(lon) != int and type(lon) != float:
+            raise TypeError('incorrect type. Enter a integer or float')
+        if float(lon) < -180 or float(lon) > 180:
+            raise Exception('latitude input is out of bounds. Latitude must be between -180 and 180')
+
+        distance_list = []
+        distance_list_names = []
+
+        for i in range(len(self.glacier_init)):
+            distance = haversine_distance(lat,lon,self.glacier_init[i].lat,self.glacier_init[i].lon)
+            distance_list.append([self.glacier_init[i].name,distance])
+        
+        distance_list.sort(key=lambda sort: sort[1])
+        for j in range(len(self.glacier_init)):
+            distance_list_names.append(distance_list[j][0])
+        print( distance_list_names[0:n])
     
     def filter_by_code(self, code_pattern):
         """Return the names of glaciers whose codes match the given pattern."""
