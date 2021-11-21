@@ -213,7 +213,16 @@ class GlacierCollection:
 
 
     def summary(self):
-        raise NotImplementedError
+        print("This collection has", str(len(self.glacier_init)), "glaciers")
+        print("The earliest measurement was in", str(min(self.year)))
+        negative_count = 0
+        positive_count = 0
+        for i in range(len(self.latest_year_measurment)):
+            if self.latest_year_measurment[i][1][1] < 0 :
+                negative_count += 1
+            elif self.latest_year_measurment[i][1][1] > 0:
+                positive_count += 1
+        print(str(int((negative_count/(positive_count+negative_count))*100))+"%" ,"of the glaciers shrunk in their last measurement")
 
     def plot_extremes(self, output_path):
         raise NotImplementedError
