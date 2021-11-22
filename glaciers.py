@@ -63,6 +63,7 @@ class Glacier:
         y = self.year_balance_dict.values()
         plt.xlabel('Year')
         plt.ylabel('Mass balance change')
+        plt.title('Plotting the mass balance change for some glacier over years measured')
         plt.plot(x,y)
         plt.savefig('')
 
@@ -208,9 +209,9 @@ class GlacierCollection:
             dummy = self.latest_year_measurment[i][0]
             self.sorted_glaciers.append(self.glacier_init[dummy])
 
-        if reverse == False:
+        if reverse == True:
             return self.sorted_glaciers[0:n]
-        elif reverse == True:
+        elif reverse == False:
             return self.sorted_glaciers[-n:]
 
 
@@ -235,9 +236,11 @@ class GlacierCollection:
         x2 = last.year_balance_dict.keys()
         y2 = last.year_balance_dict.values()
 
-
+        
         plt.xlabel('Year')
         plt.ylabel('Mass balance change')
-        plt.plot(x1,y1)
-        plt.plot(x2,y2)
+        plt.plot(x1,y1, label='Min')
+        plt.plot(x2,y2, label='Max')
+        plt.title('Comparing mass balance values of the newest and oldest recordings')
+        plt.legend()
         plt.savefig('')
