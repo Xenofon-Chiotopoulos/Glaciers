@@ -59,7 +59,12 @@ class Glacier:
             self.year_balance_dict.update({year:mass_balance[0]})
 
     def plot_mass_balance(self, output_path):
-        raise NotImplementedError
+        x = self.year_balance_dict.keys()
+        y = self.year_balance_dict.values()
+        plt.xlabel('Year')
+        plt.ylabel('Mass balance change')
+        plt.plot(x,y)
+        plt.savefig('')
 
         
 class GlacierCollection:
@@ -105,10 +110,7 @@ class GlacierCollection:
                     if self.glacier_init[j].glacier_id == id_EE:
                         current_glacier = j
                 upper_bound = int(row['UPPER_BOUND']) 
-                annual_balance = row['ANNUAL_BALANCE']
-                if type(annual_balance) != int and type(annual_balance) != float:
-                    raise TypeError('Value entered must be a integer or float')
-                annual_balance = int(annual_balance)
+                annual_balance = int(row['ANNUAL_BALANCE'])
                 if upper_bound == 9999:
                     self.glacier_init[current_glacier].add_mass_balance_measurement(yer, [annual_balance, True])
                 else:
@@ -225,4 +227,17 @@ class GlacierCollection:
         print(str(int((negative_count/(positive_count+negative_count))*100))+"%" ,"of the glaciers shrunk in their last measurement")
 
     def plot_extremes(self, output_path):
-        raise NotImplementedError
+        first = self.sorted_glaciers[0]
+        last = self.sorted_glaciers[-1]
+
+        x1 = first.year_balance_dict.keys()
+        y1 = first.year_balance_dict.values()
+        x2 = last.year_balance_dict.keys()
+        y2 = last.year_balance_dict.values()
+
+
+        plt.xlabel('Year')
+        plt.ylabel('Mass balance change')
+        plt.plot(x1,y1)
+        plt.plot(x2,y2)
+        plt.savefig('')
