@@ -1,1 +1,1 @@
-# RSD1
+# Coursework 1, for research software development. Glascier alanysis
