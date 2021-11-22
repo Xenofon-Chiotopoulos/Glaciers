@@ -49,14 +49,14 @@ class Glacier:
         self.mass_balance = []
         self.year_balance_dict = {}
 
-    def add_mass_balance_measurement(self, year, mass_balance):
-        if mass_balance[1] == True and self.current_year_balance != 0: #partical measurments fin
+    def add_mass_balance_measurement(self, year, mass_balance,boolean):
+        if boolean == True and self.current_year_balance != 0: #partical measurments fin
             self.year_balance_dict.update({year:self.current_year_balance})
             self.current_year_balance = 0
-        elif mass_balance[1] == False: # partial measurments 
-            self.current_year_balance += mass_balance[0]
+        elif boolean == False: # partial measurments 
+            self.current_year_balance += mass_balance
         else:
-            self.year_balance_dict.update({year:mass_balance[0]})
+            self.year_balance_dict.update({year:mass_balance})
 
     def plot_mass_balance(self, output_path):
         x = self.year_balance_dict.keys()
@@ -113,9 +113,9 @@ class GlacierCollection:
                 upper_bound = int(row['UPPER_BOUND']) 
                 annual_balance = int(row['ANNUAL_BALANCE'])
                 if upper_bound == 9999:
-                    self.glacier_init[current_glacier].add_mass_balance_measurement(yer, [annual_balance, True])
+                    self.glacier_init[current_glacier].add_mass_balance_measurement(yer, annual_balance, True)
                 else:
-                    self.glacier_init[current_glacier].add_mass_balance_measurement(yer, [annual_balance, False])
+                    self.glacier_init[current_glacier].add_mass_balance_measurement(yer, annual_balance, False)
 
 
     def find_nearest(self, lat, lon, n):
@@ -139,15 +139,13 @@ class GlacierCollection:
         distance_list.sort(key=lambda sort: sort[1])
         for j in range(len(self.glacier_init)):
             distance_list_names.append(distance_list[j][0])
-        print( distance_list_names[0:n])
+        return distance_list_names[0:n]
     
     def filter_by_code(self, code_pattern):
         """Return the names of glaciers whose codes match the given pattern."""
         result_list = []
         code_list = [str(i) for i in str(code_pattern)]
         number_of_unknown = code_list.count('?')
-        if type(code_pattern) != int:
-            raise TypeError('incorrect type. Enter integer')
         if len(str(code_pattern)) != 3:
             raise Exception('Input of wrong length. Enter 3 digit code')
         if number_of_unknown == 0:
@@ -192,7 +190,7 @@ class GlacierCollection:
         elif number_of_unknown == 3:
            for i in range(len(self.glacier_init)):
                 result_list.append(self.glacier_init[i].name)
-        print(result_list)
+        return result_list
 
 
     def sort_by_latest_mass_balance(self, reverse, n=5):
@@ -216,8 +214,7 @@ class GlacierCollection:
 
 
     def summary(self):
-        print("This collection has", str(len(self.glacier_init)), "glaciers")
-        print("The earliest measurement was in", str(min(self.year)))
+        self.sort_by_latest_mass_balance(True)
         negative_count = 0
         positive_count = 0
         for i in range(len(self.latest_year_measurment)):
@@ -225,7 +222,9 @@ class GlacierCollection:
                 negative_count += 1
             elif self.latest_year_measurment[i][1][1] > 0:
                 positive_count += 1
-        print(str(int((negative_count/(positive_count+negative_count))*100))+"%" ,"of the glaciers shrunk in their last measurement")
+        return print('This collection has", str(len(self.glacier_init)), "glaciers',
+                    "The earliest measurement was in", str(min(self.year)),
+                    str(int((negative_count/(positive_count+negative_count))*100))+"%" ,"of the glaciers shrunk in their last measurement")
 
     def plot_extremes(self, output_path):
         first = self.sorted_glaciers[0]
