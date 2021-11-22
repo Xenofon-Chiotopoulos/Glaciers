@@ -29,6 +29,15 @@ def test_filter_by_code():
     #checking incomplete code
     assert collection.filter_by_code('5?5') == ['PENON', 'PENON']
 
+def test_sort_by_latest_mass_balance():
+    collection = glaciers.GlacierCollection(file_path_A)
+    collection.read_mass_balance_data(file_path_EE)
+
+    assert collection.sort_by_latest_mass_balance(True,1)[0].glacier_id == '03292'
+    assert collection.sort_by_latest_mass_balance(False,1)[0].glacier_id == '01329'
+
+
+
 def test_galcier_init():
     ##ID_GLACIER
     #Negative test for wrong input type

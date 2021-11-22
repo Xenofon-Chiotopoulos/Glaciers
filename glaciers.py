@@ -65,7 +65,7 @@ class Glacier:
         plt.ylabel('Mass balance change')
         plt.title('Plotting the mass balance change for some glacier over years measured')
         plt.plot(x,y)
-        plt.savefig('')
+        plt.savefig(output_path)
 
         
 class GlacierCollection:
@@ -242,10 +242,4 @@ class GlacierCollection:
         plt.plot(x2,y2, label='Max')
         plt.title('Comparing mass balance values of the newest and oldest recordings')
         plt.legend()
-        plt.savefig('')
-
-
-collection = GlacierCollection(file_path_A)
-collection.read_mass_balance_data(file_path_EE)
-x = collection.filter_by_code('5?5')
-print(x)
+        plt.savefig(output_path)
