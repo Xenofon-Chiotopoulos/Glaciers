@@ -26,7 +26,7 @@ class Glacier:
         if type(unit) != str:
             raise TypeError('incorrect type. Enter a string')
         if len(unit) != 2:
-            raise Exception('Id not appropriate length. Enter a string of length 2')
+            raise Exception('unit not appropriate length. Enter a string of length 2')
 
         self.lat = lat
         if type(lat) != int and type(lat) != float:
@@ -243,3 +243,9 @@ class GlacierCollection:
         plt.title('Comparing mass balance values of the newest and oldest recordings')
         plt.legend()
         plt.savefig('')
+
+
+collection = GlacierCollection(file_path_A)
+collection.read_mass_balance_data(file_path_EE)
+x = collection.filter_by_code('5?5')
+print(x)
