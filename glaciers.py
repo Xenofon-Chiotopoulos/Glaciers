@@ -1,3 +1,4 @@
+import collections
 import csv
 from math import dist
 from pathlib import Path
@@ -16,7 +17,7 @@ class Glacier:
         if type(glacier_id) != str:
             raise TypeError('incorrect type. Enter a string')
         if len(glacier_id) != 5:
-            raise Exception('Id not appropriate length. Enter a string of length 5')
+            raise ValueError('Id not appropriate length. Enter a string of length 5')
 
         self.name = name
         if type(name) != str:
@@ -26,7 +27,7 @@ class Glacier:
         if type(unit) != str:
             raise TypeError('incorrect type. Enter a string')
         if len(unit) != 2:
-            raise Exception('unit not appropriate length. Enter a string of length 2')
+            raise ValueError('unit not appropriate length. Enter a string of length 2')
 
         self.lat = lat
         if type(lat) != int and type(lat) != float:
@@ -42,7 +43,7 @@ class Glacier:
 
         self.code = code
         if len(str(code)) != 3:
-            raise Exception('Input of wrong length. Enter 3 digit code')
+            raise ValueError('Input of wrong length. Enter 3 digit code')
 
         self.current_year_balance = 0
         self.year = []
@@ -102,7 +103,7 @@ class GlacierCollection:
                     continue
                 yer = int(row['YEAR'])
                 if yer > datetime.now().year:
-                    raise Exception('Year read from csv is in the future')
+                    raise ValueError('Year read from csv is in the future')
                 self.year.append(yer)
                 id_EE = str(row['WGMS_ID'])
                 if id_EE not in self.id_list:
@@ -123,11 +124,11 @@ class GlacierCollection:
         if type(lon) != int and type(lon) != float:
             raise TypeError('incorrect type. Enter a integer or float')
         if float(lon) < -180 or float(lon) > 180:
-            raise Exception('latitude input is out of bounds. Latitude must be between -180 and 180')
+            raise ValueError('latitude input is out of bounds. Latitude must be between -180 and 180')
         if type(lon) != int and type(lon) != float:
             raise TypeError('incorrect type. Enter a integer or float')
         if float(lon) < -180 or float(lon) > 180:
-            raise Exception('latitude input is out of bounds. Latitude must be between -180 and 180')
+            raise ValueError('latitude input is out of bounds. Latitude must be between -180 and 180')
 
         distance_list = []
         distance_list_names = []
@@ -147,7 +148,7 @@ class GlacierCollection:
         code_list = [str(i) for i in str(code_pattern)]
         number_of_unknown = code_list.count('?')
         if len(str(code_pattern)) != 3:
-            raise Exception('Input of wrong length. Enter 3 digit code')
+            raise ValueError('Input of wrong length. Enter 3 digit code')
         if number_of_unknown == 0:
             code_pattern = int(code_pattern)
             for i in range(len(self.glacier_init)):
