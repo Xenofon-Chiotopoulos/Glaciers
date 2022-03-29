@@ -1,1 +1,1 @@
-# Coursework 1, for research software development. Glascier alanysis
+Software for the analysis of Glaciers
